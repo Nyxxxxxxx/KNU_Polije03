@@ -8,7 +8,7 @@ app = FaceAnalysis(providers=['CUDAExecutionProvider', 'CPUExecutionProvider'])
 app.prepare(ctx_id=0, det_size=(640, 640))
 
 # Load the photo to compare with live cam
-photo_path = 'project/public/images/pic2.jpeg'  # 사진의 경로를 입력하세요
+photo_path = 'project/public/images/pic2.jpeg'  # 사진 경로
 photo = cv2.imread(photo_path)
 
 # Function to extract face embeddings using ArcFace

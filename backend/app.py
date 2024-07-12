@@ -3,6 +3,7 @@ from flask import Flask, jsonify, request
 #request : 클라이언트로부터 HTTP 요청 데이터를 다루는 객체
 from flask_cors import CORS
 #CORS : Flask-CORE 라이브러리로, CORS 설정을 쉽게 해준다.
+from pymongo import MongoClient
 
 app = Flask(__name__) 
 #Flask 애플리케이션 인스턴스 생성
