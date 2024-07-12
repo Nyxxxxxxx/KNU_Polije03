@@ -1,55 +1,42 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 
 function App() {
-  const [data, setData] = useState('');
-  const [inputValue, setInputValue] = useState('');
+  const [message, setMessage] = useState('');
+  const [studentId, setStudentId] = useState('');
 
-  useEffect(() => {
-    fetch('http://127.0.0.1:5000/api/data')
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => setData(data.message))
-      .catch(err => console.error('Error fetching data:', err));
-  }, []);
-
-  const handleSubmit = () => {
-    fetch('http://127.0.0.1:5000/api/data', {
-      method: 'POST',
+  const handleSearch = () => {
+    fetch(`http://127.0.0.1:5000/api/image/${studentId}`, {
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ input: inputValue })
+      }
     })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then(data => {
-        console.log('Data saved:', data);
-      })
-      .catch(err => console.error('Error saving data:', err));
+    .then(response => response.json())
+    .then(data => {
+      if (data.error) {
+        setMessage(data.error);
+      } else {
+        setMessage(`Image Path: ${data.imagePath}`);
+      }
+    })
+    .catch(err => {
+      console.error('Error:', err);
+      setMessage('Failed to fetch data');
+    });
   };
 
   return (
     <div className="App">
       <header className="App-header">
-        {data ? data : 'Loading...'}
-        <div>
-          <input
-            type="text"
-            value={inputValue}
-            onChange={(e) => setInputValue(e.target.value)}
-            placeholder="Enter some data"
-          />
-          <button onClick={handleSubmit}>Submit</button>
-        </div>
+        <input
+          type="text"
+          value={studentId}
+          onChange={(e) => setStudentId(e.target.value)}
+          placeholder="Enter student ID"
+        />
+        <button onClick={handleSearch}>Search</button>
+        <div>{message}</div>
       </header>
     </div>
   );
